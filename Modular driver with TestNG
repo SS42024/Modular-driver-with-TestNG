@@ -1,0 +1,140 @@
+// TestCase 1: Perform Login & Fill the Form
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class TekarchLogin {
+    public static void main(String[] args) throws InterruptedException {
+        // Set up ChromeDriver path
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://qa-tekarch.firebaseapp.com/");
+        driver.manage().window().maximize();
+        Thread.sleep(2000);
+
+        // Perform Login
+        driver.findElement(By.id("email_field")).sendKeys("admin123@gmail.com");
+        driver.findElement(By.id("password_field")).sendKeys("admin123");
+        driver.findElement(By.xpath("//button[text()='Login to Account']")).click();
+        Thread.sleep(3000);
+
+        // Validate Page Title
+        String title = driver.getTitle();
+        System.out.println("Page Title: " + title);
+        if (title.contains("Tekarch Login")) {
+            System.out.println("Login Successful!");
+        } else {
+            System.out.println("Login Failed!");
+        }
+
+        // Fill Form
+        driver.findElement(By.id("name")).sendKeys("John Doe");
+        driver.findElement(By.id("father_name")).sendKeys("Robert Doe");
+        driver.findElement(By.id("postal_address")).sendKeys("123 Street, City");
+        driver.findElement(By.id("personal_address")).sendKeys("456 Avenue, City");
+
+        // Select Female Radio Button
+        WebElement femaleRadio = driver.findElement(By.id("female_radio"));
+        femaleRadio.click();
+
+        // Enter Pincode & Email
+        driver.findElement(By.id("pincode")).sendKeys("123456");
+        driver.findElement(By.id("email")).sendKeys("johndoe@example.com");
+
+        // Submit Form
+        driver.findElement(By.id("submit_button")).click();
+        System.out.println("Test Passed: Form submitted successfully");
+
+        driver.quit();
+    }
+}
+
+
+// TestCase 2: Checkboxes on demoqa.com
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class CheckboxTest {
+    public static void main(String[] args) throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://demoqa.com/checkbox");
+        driver.manage().window().maximize();
+        Thread.sleep(2000);
+
+        // Expand Checkbox List
+        driver.findElement(By.xpath("//button[@title='Toggle']")).click();
+        Thread.sleep(1000);
+
+        // Select Desktop and Downloads Checkboxes
+        driver.findElement(By.xpath("//span[text()='Desktop']")).click();
+        driver.findElement(By.xpath("//span[text()='Downloads']")).click();
+        Thread.sleep(2000);
+
+        // Validate Selection
+        String selectionMessage = driver.findElement(By.id("result")).getText();
+        String expectedMessage = "You have selected :desktopnotescommandsdownloadswordFileexcelFile";
+
+        if (selectionMessage.contains("desktop") && selectionMessage.contains("downloads")) {
+            System.out.println("Test Passed: Correct checkboxes selected");
+        } else {
+            System.out.println("Test Failed: Incorrect selection");
+        }
+
+        driver.quit();
+    }
+}
+
+
+//3️⃣, 4️⃣, & 5️⃣ Test Cases - Salesforce Login
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class SalesforceLogin {
+    public static void testSalesforceLogin(String username, String password, boolean expectedSuccess) throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://login.salesforce.com/");
+        driver.manage().window().maximize();
+        Thread.sleep(2000);
+
+        driver.findElement(By.id("username")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("Login")).click();
+        Thread.sleep(3000);
+
+        if (expectedSuccess) {
+            if (driver.getTitle().contains("Home")) {
+                System.out.println("Salesforce Login Successful");
+            } else {
+                System.out.println("Salesforce Login Failed");
+            }
+        } else {
+            String errorMessage = driver.findElement(By.id("error")).getText();
+            System.out.println("Login Failed: " + errorMessage);
+        }
+
+        driver.quit();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        // Test Case 3: Valid Login
+        testSalesforceLogin("valid_username", "valid_password", true);
+
+        // Test Case 4: Invalid Password
+        testSalesforceLogin("valid_username", "wrongpassword", false);
+
+        // Test Case 5: Invalid Username
+        testSalesforceLogin("wrong_username", "valid_password", false);
+    }
+}
+
